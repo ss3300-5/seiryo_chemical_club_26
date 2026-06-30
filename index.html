@@ -213,6 +213,51 @@
     opacity:0.85;
   }
 
+  /* ---------- event link ---------- */
+  .event-link-wrap{
+    padding:14px 20px 4px;
+    position:relative;
+    z-index:1;
+  }
+
+  .event-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--ink);
+    color:var(--paper);
+    text-decoration:none;
+    border-radius:12px;
+    padding:13px 16px;
+    box-shadow:0 4px 12px var(--shadow);
+    transition:opacity 0.15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .event-link:active{
+    opacity:0.75;
+  }
+
+  .event-link-icon{
+    font-size:20px;
+    flex:0 0 auto;
+  }
+
+  .event-link-text{
+    flex:1;
+    font-size:13.5px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    line-height:1.4;
+  }
+
+  .event-link-arrow{
+    flex:0 0 auto;
+    font-size:16px;
+    color:var(--amber);
+    font-weight:700;
+  }
+
   /* ---------- now card ---------- */
   .now-wrap{
     padding:6px 20px 26px;
@@ -346,7 +391,7 @@
   .slot::before{
     content:"";
     position:absolute;
-    left:-6.5px;
+    left:-8px;
     top:20px;
     width:10px;
     height:10px;
@@ -358,6 +403,7 @@
   .slot.is-now::before{
     background:var(--emerald);
     border-color:var(--emerald);
+    left:0px;
   }
 
   .slot.is-now{
@@ -611,6 +657,14 @@
     </div>
     <div class="beaker-rule"></div>
   </header>
+
+  <div class="event-link-wrap">
+    <a class="event-link" href="https://seiryofes.web.app/" target="_blank" rel="noopener">
+      <span class="event-link-icon">🎪</span>
+      <span class="event-link-text">清陵祭のすべてのイベントはこちらから！</span>
+      <span class="event-link-arrow">→</span>
+    </a>
+  </div>
 
   <div class="now-wrap">
     <div class="now-card">
