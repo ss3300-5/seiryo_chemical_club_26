@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>清陵祭 -Chemical_Club App-</title>
+<style>
+  :root{
+    --ink:#0B2F4F;
+    --ink-soft:#3A5C7D;
+    --paper:#EEF3F8;
+    --paper-dim:#dde6ee;
+    --emerald:#2E86C1;
+    --emerald-deep:#1B5E8E;
+    --amber:#6FB8D9;
+    --vermilion:#1E4E8C;
+    --line:#b9cadb;
+    --shadow: rgba(11,47,79,0.18);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Yu Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+  }
+
+  body{
+    background-image:
+      radial-gradient(circle at 90% -10%, rgba(46,134,193,0.12), transparent 45%),
+      radial-gradient(circle at -10% 110%, rgba(30,78,140,0.10), transparent 40%);
+    min-height:100vh;
+  }
+
+  .frame{
+    max-width:560px;
+    margin:0 auto;
+    padding:0 0 56px;
+    position:relative;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    padding:28px 20px 18px;
+    position:relative;
+  }
+
+  .scatter{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+
+  .scatter .mini-tile{
+    position:absolute;
+    width:38px;
+    height:38px;
+    border-radius:6px;
+    background:var(--ink);
+    color:var(--paper);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    opacity:0.08;
+  }
+  .scatter .mini-tile .num{
+    position:absolute;
+    top:2px;
+    left:4px;
+    font-size:6px;
+    font-family:"Courier New",ui-monospace,monospace;
+  }
+  .scatter .mini-tile .sym{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:14px;
+    font-weight:700;
+    line-height:1;
+  }
+  .scatter .tilt{transform:rotate(-8deg);}
+  .scatter .tilt2{transform:rotate(7deg);}
+
+  .frame, header, .now-wrap, .day-section, footer{position:relative;z-index:1;}
+
+  .tape{
+    display:inline-block;
+    background:var(--vermilion);
+    color:var(--paper);
+    font-size:11px;
+    letter-spacing:0.18em;
+    font-weight:700;
+    padding:4px 10px;
+    transform:rotate(-1.5deg);
+    box-shadow:2px 2px 0 var(--shadow);
+    margin-bottom:14px;
+  }
+
+  h1{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:26px;
+    line-height:1.35;
+    margin:0 0 4px;
+    letter-spacing:0.01em;
+    color:var(--ink);
+    display:flex;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .title-twist{
+    display:inline-block;
+    font-size:14px;
+    font-weight:700;
+    color:var(--paper);
+    background:var(--emerald-deep);
+    padding:3px 9px;
+    border-radius:4px;
+    transform:rotate(-7deg);
+    letter-spacing:0.03em;
+    box-shadow:1.5px 1.5px 0 var(--shadow);
+  }
+  h1 .sub{
+    display:inline-block;
+    font-size:18px;
+    font-weight:600;
+    color:var(--ink-soft);
+    letter-spacing:0.05em;
+  }
+
+  .element-row{
+    margin-top:16px;
+    overflow:hidden;
+    position:relative;
+    mask-image:linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+    -webkit-mask-image:linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+  }
+
+  .element-track{
+    display:flex;
+    gap:14px;
+    width:max-content;
+    will-change:transform;
+    animation:scroll-belt 14s linear infinite;
+  }
+
+  @keyframes scroll-belt{
+    from{transform:translateX(-50%);}
+    to{transform:translateX(0);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .element-track{animation:none;}
+  }
+
+  .element-tile{
+    flex:0 0 auto;
+    width:42px;
+    aspect-ratio:1/1;
+    border-radius:7px;
+    background:var(--ink);
+    color:var(--paper);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    box-shadow:1px 1px 0 var(--shadow);
+  }
+
+  .element-tile .num{
+    position:absolute;
+    top:3px;
+    left:5px;
+    font-size:8px;
+    color:var(--amber);
+    font-family:"Courier New",ui-monospace,monospace;
+  }
+
+  .element-tile .sym{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:16px;
+    font-weight:700;
+    line-height:1;
+  }
+
+  .element-tile .name{
+    font-size:7px;
+    letter-spacing:0.03em;
+    margin-top:3px;
+    color:#c7d6e3;
+  }
+
+  .element-tile:nth-child(4n+2){background:var(--emerald-deep);}
+  .element-tile:nth-child(4n+3){background:var(--ink-soft);}
+  .element-tile:nth-child(4n+4){background:var(--vermilion);}
+
+  .beaker-rule{
+    height:6px;
+    margin-top:16px;
+    background:repeating-linear-gradient(
+      90deg,
+      var(--emerald) 0 18px,
+      var(--amber) 18px 36px
+    );
+    border-radius:3px;
+    opacity:0.85;
+  }
+
+  /* ---------- now card ---------- */
+  .now-wrap{
+    padding:6px 20px 26px;
+  }
+
+  .now-card{
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:18px;
+    padding:22px 20px 20px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 10px 24px var(--shadow);
+  }
+
+  .now-card::before{
+    content:"";
+    position:absolute;
+    right:-30px;
+    top:-30px;
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(46,134,193,0.35), transparent 70%);
+  }
+
+  .now-label{
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--emerald);
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .pulse-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--emerald);
+    box-shadow:0 0 0 0 rgba(46,134,193,0.6);
+    animation:pulse 1.8s infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pulse-dot{animation:none;}
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(46,134,193,0.55);}
+    70%{box-shadow:0 0 0 10px rgba(46,134,193,0);}
+    100%{box-shadow:0 0 0 0 rgba(46,134,193,0);}
+  }
+
+  .now-time{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:13px;
+    color:#a9bdd1;
+    margin-top:10px;
+  }
+
+  .now-title{
+    font-size:24px;
+    font-weight:700;
+    margin-top:6px;
+    line-height:1.4;
+    position:relative;
+    z-index:1;
+  }
+
+  .now-title.slot-title-link{
+    text-decoration-color:#5d7a98;
+  }
+
+  .now-desc{
+    margin-top:10px;
+    font-size:13.5px;
+    line-height:1.7;
+    color:#cfd9e3;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ---------- day section ---------- */
+  .day-section{
+    padding:0 20px 30px;
+  }
+
+  .day-heading{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:14px;
+  }
+
+  .day-heading .num{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:13px;
+    background:var(--amber);
+    color:var(--ink);
+    padding:2px 8px;
+    border-radius:4px;
+    font-weight:700;
+  }
+
+  .day-heading .label{
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .day-heading .date{
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  .schedule{
+    border-left:3px solid var(--line);
+    padding-left:0;
+    position:relative;
+  }
+
+  .slot{
+    display:flex;
+    gap:14px;
+    padding:13px 0 13px 18px;
+    border-bottom:1px solid var(--paper-dim);
+    position:relative;
+  }
+  .slot:last-child{border-bottom:none;}
+
+  .slot::before{
+    content:"";
+    position:absolute;
+    left:-6.5px;
+    top:20px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--paper);
+    border:3px solid var(--line);
+  }
+
+  .slot.is-now::before{
+    background:var(--emerald);
+    border-color:var(--emerald);
+  }
+
+  .slot.is-now{
+    background:rgba(46,134,193,0.07);
+    border-radius:8px;
+    margin-left:-8px;
+    padding-left:26px;
+  }
+  .slot.is-now::after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:4px;
+    background:var(--emerald);
+    border-radius:2px;
+  }
+
+  .slot.is-past{
+    opacity:0.45;
+  }
+
+  .slot-time{
+    flex:0 0 92px;
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+    padding-top:1px;
+  }
+
+  .slot-body{
+    flex:1;
+    min-width:0;
+  }
+
+  .slot-title{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .slot-title-link{
+    cursor:pointer;
+    text-decoration:underline;
+    text-decoration-color:var(--line);
+    text-underline-offset:3px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .slot-title-link:active{
+    opacity:0.6;
+  }
+
+  .slot.is-now .slot-title{
+    color:var(--emerald-deep);
+  }
+
+  .badge{
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.05em;
+    padding:1px 7px;
+    border-radius:999px;
+    margin-left:8px;
+    vertical-align:middle;
+    background:var(--vermilion);
+    color:#fff;
+  }
+
+  .slot-note{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-soft);
+    padding:10px 20px 0;
+    letter-spacing:0.04em;
+  }
+
+  /* ---------- detail sections ---------- */
+  .detail-area{
+    padding:6px 20px 8px;
+  }
+
+  .detail-area-heading{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+  }
+
+  .detail-area-heading .icon-chip{
+    width:26px;
+    height:26px;
+    border-radius:6px;
+    background:var(--ink);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:13px;
+    font-weight:700;
+  }
+
+  .detail-area-heading .label{
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .detail-block{
+    background:#fff;
+    border:1px solid var(--paper-dim);
+    border-radius:14px;
+    padding:18px 18px 16px;
+    margin-bottom:16px;
+    scroll-margin-top:14px;
+    transition:box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+
+  .detail-block.flash{
+    animation:glow-pulse 1.8s ease-out 1;
+  }
+
+  @keyframes glow-pulse{
+    0%{
+      border-color:var(--emerald-deep);
+      box-shadow:0 0 0 4px rgba(46,134,193,0.35), 0 0 18px 4px rgba(46,134,193,0.45);
+    }
+    70%{
+      border-color:var(--emerald-deep);
+      box-shadow:0 0 0 4px rgba(46,134,193,0.20), 0 0 14px 2px rgba(46,134,193,0.25);
+    }
+    100%{
+      border-color:var(--paper-dim);
+      box-shadow:none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .detail-block.flash{animation:none;}
+  }
+
+  .detail-block-title{
+    font-size:15.5px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .detail-block-title .num{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:11px;
+    color:var(--paper);
+    background:var(--emerald-deep);
+    padding:1px 6px;
+    border-radius:4px;
+  }
+
+  .detail-item{
+    margin-bottom:14px;
+  }
+  .detail-item:last-child{
+    margin-bottom:0;
+  }
+
+  .detail-item-title{
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:3px;
+  }
+
+  .detail-item-body{
+    font-size:13px;
+    line-height:1.85;
+    color:var(--ink);
+  }
+
+
+  /* small screens */
+  @media (max-width:380px){
+    h1{font-size:22px;}
+    .title-twist{font-size:12px;padding:2px 7px;}
+    h1 .sub{font-size:16px;}
+    .now-title{font-size:20px;}
+    .slot-time{flex-basis:78px;font-size:12px;}
+    .element-tile{width:38px;}
+    .element-tile .sym{font-size:15px;}
+    .scatter .mini-tile{width:30px;height:30px;opacity:0.08;}
+    .scatter .mini-tile .sym{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="scatter">
+    <div class="mini-tile tilt" style="top:1%; left:60%;"><span class="num">7</span><span class="sym">N</span></div>
+    <div class="mini-tile tilt2" style="top:6%; left:6%;"><span class="num">26</span><span class="sym">Fe</span></div>
+    <div class="mini-tile tilt2" style="top:1%; left:82%;"><span class="num">29</span><span class="sym">Cu</span></div>
+    <div class="mini-tile tilt" style="top:13%; left:42%;"><span class="num">17</span><span class="sym">Cl</span></div>
+    <div class="mini-tile tilt" style="top:18%; left:76%;"><span class="num">19</span><span class="sym">K</span></div>
+    <div class="mini-tile tilt2" style="top:16%; left:18%;"><span class="num">12</span><span class="sym">Mg</span></div>
+    <div class="mini-tile tilt" style="top:1%; left:30%;"><span class="num">30</span><span class="sym">Zn</span></div>
+    <div class="mini-tile tilt2" style="top:9%; left:92%;"><span class="num">79</span><span class="sym">Au</span></div>
+    <div class="mini-tile tilt" style="top:32%; left:4%;"><span class="num">16</span><span class="sym">S</span></div>
+    <div class="mini-tile tilt2" style="top:38%; left:88%;"><span class="num">47</span><span class="sym">Ag</span></div>
+    <div class="mini-tile tilt" style="top:48%; left:60%;"><span class="num">15</span><span class="sym">P</span></div>
+    <div class="mini-tile tilt2" style="top:55%; left:10%;"><span class="num">9</span><span class="sym">F</span></div>
+    <div class="mini-tile tilt" style="top:62%; left:80%;"><span class="num">20</span><span class="sym">Ca</span></div>
+    <div class="mini-tile tilt2" style="top:70%; left:30%;"><span class="num">14</span><span class="sym">Si</span></div>
+    <div class="mini-tile tilt" style="top:78%; left:55%;"><span class="num">13</span><span class="sym">Al</span></div>
+    <div class="mini-tile tilt2" style="top:85%; left:6%;"><span class="num">35</span><span class="sym">Br</span></div>
+    <div class="mini-tile tilt" style="top:90%; left:85%;"><span class="num">3</span><span class="sym">Li</span></div>
+    <div class="mini-tile tilt2" style="top:42%; left:42%;"><span class="num">2</span><span class="sym">He</span></div>
+  </div>
+
+  <header>
+    <span class="tape">SEIRYO FESTIVAL</span>
+    <h1><span class="title-twist">化学部の！</span>清陵祭アプリ<span class="sub">— Chemical_Club App —</span></h1>
+    <div class="element-row">
+      <div class="element-track">
+        <div class="element-tile"><span class="num">1</span><span class="sym">H</span><span class="name">水素</span></div>
+        <div class="element-tile"><span class="num">6</span><span class="sym">C</span><span class="name">炭素</span></div>
+        <div class="element-tile"><span class="num">8</span><span class="sym">O</span><span class="name">酸素</span></div>
+        <div class="element-tile"><span class="num">11</span><span class="sym">Na</span><span class="name">ナトリウム</span></div>
+        <div class="element-tile"><span class="num">7</span><span class="sym">N</span><span class="name">窒素</span></div>
+        <div class="element-tile"><span class="num">17</span><span class="sym">Cl</span><span class="name">塩素</span></div>
+        <div class="element-tile"><span class="num">26</span><span class="sym">Fe</span><span class="name">鉄</span></div>
+        <div class="element-tile"><span class="num">29</span><span class="sym">Cu</span><span class="name">銅</span></div>
+        <!-- 複製してシームレスにループ -->
+        <div class="element-tile"><span class="num">1</span><span class="sym">H</span><span class="name">水素</span></div>
+        <div class="element-tile"><span class="num">6</span><span class="sym">C</span><span class="name">炭素</span></div>
+        <div class="element-tile"><span class="num">8</span><span class="sym">O</span><span class="name">酸素</span></div>
+        <div class="element-tile"><span class="num">11</span><span class="sym">Na</span><span class="name">ナトリウム</span></div>
+        <div class="element-tile"><span class="num">7</span><span class="sym">N</span><span class="name">窒素</span></div>
+        <div class="element-tile"><span class="num">17</span><span class="sym">Cl</span><span class="name">塩素</span></div>
+        <div class="element-tile"><span class="num">26</span><span class="sym">Fe</span><span class="name">鉄</span></div>
+        <div class="element-tile"><span class="num">29</span><span class="sym">Cu</span><span class="name">銅</span></div>
+      </div>
+    </div>
+    <div class="beaker-rule"></div>
+  </header>
+
+  <div class="now-wrap">
+    <div class="now-card">
+      <div class="now-label"><span class="pulse-dot"></span>ただいまの様子</div>
+      <div class="now-time" id="nowClock">--:--</div>
+      <div class="now-title" id="nowTitle">読み込み中…</div>
+      <div class="now-desc" id="nowDesc"></div>
+    </div>
+  </div>
+
+  <div class="day-section">
+    <div class="day-heading">
+      <span class="num">DAY 1</span>
+      <span class="label">7月4日（土）</span>
+    </div>
+    <div class="schedule" id="day1"></div>
+  </div>
+
+  <div class="day-section">
+    <div class="day-heading">
+      <span class="num">DAY 2</span>
+      <span class="label">7月5日（日）</span>
+    </div>
+    <div class="schedule" id="day2"></div>
+  </div>
+
+  <div class="detail-area">
+    <div class="detail-area-heading">
+      <span class="icon-chip">i</span>
+      <span class="label">催し物くわしく</span>
+    </div>
+
+    <div class="detail-block" id="detail-normal">
+      <div class="detail-block-title"><span class="num">01</span>通常公開</div>
+
+      <div class="detail-item">
+        <div class="detail-item-title">スライム・スーパーボール</div>
+        <div class="detail-item-body">スライムとなんちゃってスーパーボールを作ることができます！　作ったスライムは持ち帰ることができます！　化学部員にスライムってどうやってできるの？って聞いてみましょう。そしたらきっと教えてくれるはずです！</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-item-title">液体窒素</div>
+        <div class="detail-item-body">液体窒素の温度は−196℃！　とっても冷たい液体です。この液体窒素を使っていろんなものを冷やしてみましょう。どうなるのかは自分の目で確かめてみてください！</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-item-title">各種展示</div>
+        <div class="detail-item-body">化学部の研究内容をまとめたポスターや、作ったものを展示しています。部員が分かりやすく説明してくれると思うので、気になったポスターがあれば気軽に話しかけてくださいね！</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-item-title">エメラルド販売</div>
+        <div class="detail-item-body">エメラルド班が研究の過程で作ったエメラルドを300円で販売します！　そんなに大きくないですが、ちゃんと本物のエメラルドです！　思い出にどうでしょう？</div>
+      </div>
+    </div>
+
+    <div class="detail-block" id="detail-booth">
+      <div class="detail-block-title"><span class="num">02</span>通常公開+実験ブース</div>
+      <div class="detail-item">
+        <div class="detail-item-body">実験ショーと違い、面白く楽しい化学実験が目の前で繰り広げられます！　実際に触ったり、やってみたり、と体験ができます！　ぜひ体験しに来てくださいね！　この時間は通常公開の内容（スライム・スーパーボール作り、液体窒素、各種展示、エメラルド販売）もあわせてお楽しみいただけます。</div>
+      </div>
+    </div>
+
+    <div class="detail-block" id="detail-show">
+      <div class="detail-block-title"><span class="num">03</span>実験ショー</div>
+      <div class="detail-item">
+        <div class="detail-item-body">毎年大好評の実験ショーです！　一般公開中に3回行います。すべて違う人が、違う実験を行うので、全部来ても、一つだけ来ても楽しめる内容になっています！　ぜひ見に来てくださいね！</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>清陵祭 化学部 © 2026</footer>
+</div>
+
+<script>
+// ===== タイムテーブルデータ =====
+// title が null のものは「通常」表示にする
+const DEFAULT_TITLE = "通常公開";
+const DEFAULT_DESC = "化学部の展示・実験コーナーを自由にご覧いただけます。";
+
+const schedules = {
+  day1: {
+    date: "2026-07-04",
+    label: "1日目 7/4（土）",
+    slots: [
+      { start: "13:30", end: "14:30", title: null, detail: "normal" },
+      { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学部による実験ショーを開催します。", detail: "show" },
+      { start: "15:30", end: "16:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "16:00", end: "16:20", title: null, detail: "normal" },
+    ]
+  },
+  day2: {
+    date: "2026-07-05",
+    label: "2日目 7/5（日）",
+    slots: [
+      { start: "9:30",  end: "10:00", title: null, detail: "normal" },
+      { start: "10:00", end: "10:30", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "10:30", end: "11:00", title: null, detail: "normal" },
+      { start: "11:00", end: "12:00", title: "第2回 実験ショー", desc: "化学部による実験ショーを開催します。", detail: "show" },
+      { start: "12:00", end: "12:30", title: null, detail: "normal" },
+      { start: "12:30", end: "13:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "13:00", end: "13:30", title: null, detail: "normal" },
+      { start: "13:30", end: "14:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "14:00", end: "15:00", title: "第3回 実験ショー", desc: "化学部による実験ショーを開催します。", detail: "show" },
+      { start: "15:00", end: "16:00", title: null, detail: "normal" },
+    ]
+  }
+};
+
+function toMinutes(hhmm){
+  const [h, m] = hhmm.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function pad(n){ return n.toString().padStart(2, "0"); }
+
+function renderSchedule(containerId, dayData){
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  dayData.slots.forEach((slot, idx) => {
+    const div = document.createElement("div");
+    div.className = "slot";
+    div.dataset.day = dayData.date;
+    div.dataset.start = slot.start;
+    div.dataset.end = slot.end;
+
+    const isSpecial = !!slot.title;
+    const title = slot.title || DEFAULT_TITLE;
+    const detailKey = slot.detail || "normal";
+
+    div.innerHTML = `
+      <div class="slot-time">${slot.start}<br>〜${slot.end}</div>
+      <div class="slot-body">
+        <div class="slot-title slot-title-link" data-detail="${detailKey}">${title}${isSpecial ? '<span class="badge">注目</span>' : ''}</div>
+        ${slot.desc ? `<div class="slot-note">${slot.desc}</div>` : ''}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+renderSchedule("day1", schedules.day1);
+renderSchedule("day2", schedules.day2);
+
+// タイトルクリックで詳細セクションへスクロール
+document.addEventListener("click", (e) => {
+  const target = e.target.closest("[data-detail]");
+  if (!target) return;
+  const key = target.dataset.detail;
+  const section = document.getElementById("detail-" + key);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    section.classList.remove("flash");
+    requestAnimationFrame(() => section.classList.add("flash"));
+    section.addEventListener("animationend", () => {
+      section.classList.remove("flash");
+    }, { once: true });
+  }
+});
+
+function update(){
+  const now = new Date();
+  const todayStr = now.getFullYear() + "-" + pad(now.getMonth()+1) + "-" + pad(now.getDate());
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+
+  document.getElementById("nowClock").textContent =
+    pad(now.getMonth()+1) + "/" + pad(now.getDate()) + "（" + ["日","月","火","水","木","金","土"][now.getDay()] + "） " +
+    pad(now.getHours()) + ":" + pad(now.getMinutes());
+
+  let currentSlot = null;
+  let currentDayData = null;
+
+  // 全スロットに past / now のクラスを振る
+  document.querySelectorAll(".slot").forEach(el => {
+    el.classList.remove("is-now", "is-past");
+    const day = el.dataset.day;
+    const startMin = toMinutes(el.dataset.start);
+    const endMin = toMinutes(el.dataset.end);
+
+    if (day === todayStr) {
+      if (nowMin >= startMin && nowMin < endMin) {
+        el.classList.add("is-now");
+      } else if (nowMin >= endMin) {
+        el.classList.add("is-past");
+      }
+    } else if (day < todayStr) {
+      el.classList.add("is-past");
+    }
+  });
+
+  // 今の状態を判定（日付が一致しスロット内にいる場合）
+  for (const key of ["day1", "day2"]) {
+    const d = schedules[key];
+    if (d.date === todayStr) {
+      for (const slot of d.slots) {
+        const startMin = toMinutes(slot.start);
+        const endMin = toMinutes(slot.end);
+        if (nowMin >= startMin && nowMin < endMin) {
+          currentSlot = slot;
+          currentDayData = d;
+          break;
+        }
+      }
+    }
+  }
+
+  const titleEl = document.getElementById("nowTitle");
+  const descEl = document.getElementById("nowDesc");
+
+  if (currentSlot) {
+    titleEl.textContent = currentSlot.title || DEFAULT_TITLE;
+    descEl.textContent = currentSlot.desc || DEFAULT_DESC;
+    titleEl.dataset.detail = currentSlot.detail || "normal";
+    titleEl.classList.add("slot-title-link");
+  } else {
+    // 開催日だが時間外、または開催日ではない
+    const isFestivalDay = (todayStr === schedules.day1.date || todayStr === schedules.day2.date);
+    if (isFestivalDay) {
+      titleEl.textContent = "本日の開催時間外です";
+      descEl.textContent = "開催時間内に再度ご確認ください。";
+    } else {
+      titleEl.textContent = "清陵祭は7/4(土)・7/5(日)に開催";
+      descEl.textContent = "開催期間中はこのページで現在の催し物が確認できます。";
+    }
+    delete titleEl.dataset.detail;
+    titleEl.classList.remove("slot-title-link");
+  }
+}
+
+update();
+setInterval(update, 15000); // 15秒ごとに更新
+</script>
+</body>
+</html>
