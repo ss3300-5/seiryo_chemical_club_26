@@ -87,7 +87,7 @@
   .scatter .tilt{transform:rotate(-8deg);}
   .scatter .tilt2{transform:rotate(7deg);}
 
-  .frame, header, .now-wrap, .day-section, footer{position:relative;z-index:1;}
+  .frame, header, .now-wrap, .mid-area, .day-section, footer{position:relative;z-index:1;}
 
   .tape{
     display:inline-block;
@@ -213,22 +213,91 @@
     opacity:0.85;
   }
 
-  /* ---------- event link ---------- */
-  .event-link-wrap{
-    padding:14px 20px 4px;
+  /* ---------- mid area ---------- */
+  .mid-area{
+    padding:0 20px 6px;
     position:relative;
     z-index:1;
   }
 
+  .countdown-card{
+    flex:1.4;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:12px;
+    padding:12px 14px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:4px;
+    min-width:0;
+  }
+  .countdown-card-full{
+    flex:none;
+    flex-direction:row;
+    align-items:center;
+    gap:16px;
+  }
+  .countdown-card-full .countdown-label{
+    font-size:11px;
+    white-space:nowrap;
+  }
+  .countdown-card-full .countdown-show{
+    flex:1;
+    font-size:14px;
+  }
+  .countdown-card-full .countdown-timer{
+    font-size:28px;
+    white-space:nowrap;
+  }
+  .countdown-label{
+    font-size:10px;
+    letter-spacing:0.15em;
+    color:var(--amber);
+    font-weight:700;
+  }
+  .countdown-show{
+    font-size:12px;
+    font-weight:700;
+    color:var(--paper);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .countdown-timer{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:26px;
+    font-weight:700;
+    color:#fff;
+    letter-spacing:0.04em;
+    line-height:1;
+  }
+  .countdown-timer span{
+    font-size:13px;
+    font-weight:400;
+    color:var(--amber);
+  }
+
+  /* ---------- event link ---------- */
+  /* ---------- top nav area ---------- */
+  .top-nav-area{
+    padding:14px 20px 4px;
+    position:relative;
+    z-index:1;
+    display:flex;
+    gap:10px;
+  }
+
   .event-link{
+    flex:1;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:8px;
     background:var(--ink);
     color:var(--paper);
     text-decoration:none;
     border-radius:12px;
-    padding:13px 16px;
+    padding:12px 14px;
     box-shadow:0 4px 12px var(--shadow);
     transition:opacity 0.15s ease;
     -webkit-tap-highlight-color:transparent;
@@ -239,13 +308,13 @@
   }
 
   .event-link-icon{
-    font-size:20px;
+    font-size:18px;
     flex:0 0 auto;
   }
 
   .event-link-text{
     flex:1;
-    font-size:13.5px;
+    font-size:12px;
     font-weight:700;
     letter-spacing:0.02em;
     line-height:1.4;
@@ -253,9 +322,40 @@
 
   .event-link-arrow{
     flex:0 0 auto;
-    font-size:16px;
+    font-size:14px;
     color:var(--amber);
     font-weight:700;
+  }
+
+  .science-btn{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#1565a8;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:12px 14px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(21,101,168,0.28);
+    transition:opacity 0.15s;
+    -webkit-tap-highlight-color:transparent;
+    text-align:left;
+  }
+  .science-btn:active{opacity:0.7;}
+  .science-btn-icon{font-size:18px;flex:0 0 auto;}
+  .science-btn-text{
+    flex:1;
+    font-size:12px;
+    font-weight:700;
+    line-height:1.4;
+  }
+  .science-btn-arrow{
+    font-size:14px;
+    font-weight:700;
+    opacity:0.8;
+    flex:0 0 auto;
   }
 
   /* ---------- now card ---------- */
@@ -593,6 +693,64 @@
   }
 
 
+  /* ---------- science area ---------- */
+  .science-area{
+    padding:24px 20px 24px;
+    margin-top:16px;
+    position:relative;
+    z-index:1;
+  }
+
+  .science-area-divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .science-area-divider::before,
+  .science-area-divider::after{
+    content:"";
+    flex:1;
+    height:1.5px;
+    background:linear-gradient(90deg, transparent, var(--line));
+  }
+  .science-area-divider::after{
+    background:linear-gradient(90deg, var(--line), transparent);
+  }
+  .science-area-divider-label{
+    font-size:11px;
+    letter-spacing:0.15em;
+    color:var(--ink-soft);
+    font-weight:700;
+    white-space:nowrap;
+  }
+
+  .science-area-heading{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+    padding-top:18px;
+  }
+
+  .science-area-heading .icon-chip{
+    width:26px;
+    height:26px;
+    border-radius:6px;
+    background:var(--ink-soft);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+  }
+
+  .science-area-heading .label{
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
   /* small screens */
   @media (max-width:380px){
     h1{font-size:22px;}
@@ -658,13 +816,22 @@
     <div class="beaker-rule"></div>
   </header>
 
-  <div class="event-link-wrap">
+  <!-- 上部ナビゲーションエリア -->
+  <div class="top-nav-area">
     <a class="event-link" href="https://seiryofes.web.app/" target="_blank" rel="noopener">
       <span class="event-link-icon">🎪</span>
       <span class="event-link-text">清陵祭のすべてのイベントはこちらから！</span>
       <span class="event-link-arrow">→</span>
     </a>
+    <button class="science-btn" data-detail="science">
+      <span class="science-btn-icon">🔬</span>
+      <span class="science-btn-text">他の科学系部活の案内</span>
+      <span class="science-btn-arrow">→</span>
+    </button>
   </div>
+
+  <!-- カウントダウン（実験ショー15分前のみ表示） -->
+  <div class="mid-area" id="midArea"></div>
 
   <div class="now-wrap">
     <div class="now-card">
@@ -732,6 +899,33 @@
       <div class="detail-block-title"><span class="num">03</span>実験ショー</div>
       <div class="detail-item">
         <div class="detail-item-body">毎年大好評の実験ショーです！　一般公開中に3回行います。すべて違う人が、違う実験を行うので、全部来ても、一つだけ来ても楽しめる内容になっています！　ぜひ見に来てくださいね！</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="science-area">
+    <div class="science-area-divider">
+      <span class="science-area-divider-label">他の科学系部活の案内</span>
+    </div>
+    <div class="science-area-heading">
+      <span class="icon-chip">🔬</span>
+      <span class="label">他の科学系部活の案内</span>
+    </div>
+
+    <div class="detail-block" id="detail-science">
+      <div class="detail-item">
+        <div class="detail-item-title">🌿 生物部「生物・標本展示」　理系棟2F 生物室</div>
+        <div class="detail-item-body">生物部が飼育している生き物の展示と、オリジナル標本の展示・販売を行っています！生物部の個性豊かな生き物、ぜひ見に来てください！</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-item-title">⚙️ 物理部「ピタゴラスイッチ・3Dプリンター/研究展示」　理系棟3F 物理室</div>
+        <div class="detail-item-body">ピタゴラスイッチを一定間隔で実施中！3Dプリンターでの作成物も配布しています。お気軽にお越しください！</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-item-title">🌌 天文気象部「天と地の秘密展」　文系棟2F 家庭科室</div>
+        <div class="detail-item-body">地学系の実験や、スタンプラリー、鉱物販売、屋上見学を実施中！ぜひ来てください！</div>
       </div>
     </div>
   </div>
@@ -892,10 +1086,55 @@ function update(){
     delete titleEl.dataset.detail;
     titleEl.classList.remove("slot-title-link");
   }
+
+  // ===== mid-area: カウントダウン or 科学系部活ボタン =====
+  const midArea = document.getElementById("midArea");
+
+  // 今日の実験ショースロットを取得
+  const showSlots = [];
+  for (const key of ["day1", "day2"]) {
+    const d = schedules[key];
+    if (d.date === todayStr) {
+      d.slots.forEach(s => {
+        if (s.title && s.title.includes("実験ショー")) {
+          showSlots.push(s);
+        }
+      });
+    }
+  }
+
+  // 15分以内に始まる実験ショーを探す
+  let upcoming = null;
+  for (const s of showSlots) {
+    const startMin = toMinutes(s.start);
+    const diff = startMin - nowMin;
+    if (diff > 0 && diff <= 15) {
+      upcoming = { slot: s, diff };
+      break;
+    }
+  }
+
+  if (upcoming) {
+    const { slot, diff } = upcoming;
+    const totalSec = diff * 60 - now.getSeconds();
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    const timerStr = `${m}<span>分</span>${pad(s)}<span>秒</span>`;
+
+    midArea.innerHTML = `
+      <div class="countdown-card countdown-card-full">
+        <div class="countdown-label">▶ まもなく開始</div>
+        <div class="countdown-show">${slot.title}</div>
+        <div class="countdown-timer">${timerStr}</div>
+      </div>
+    `;
+  } else {
+    midArea.innerHTML = "";
+  }
 }
 
 update();
-setInterval(update, 15000); // 15秒ごとに更新
+setInterval(update, 1000); // 1秒ごとに更新（カウントダウンのため）
 </script>
 </body>
 </html>
