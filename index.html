@@ -441,6 +441,25 @@
     z-index:1;
   }
 
+  .ending-soon{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:#FFD166;
+    margin-bottom:6px;
+    letter-spacing:0.04em;
+    animation:blink-warn 1.4s ease-in-out infinite;
+  }
+
+  @keyframes blink-warn{
+    0%,100%{opacity:1;}
+    50%{opacity:0.45;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ending-soon{animation:none;}
+  }
+
   /* ---------- day section ---------- */
   .day-section{
     padding:0 20px 30px;
@@ -751,6 +770,19 @@
     color:var(--ink);
   }
 
+  .according{
+    font-size:11px;
+    font-weight:400;
+    color:var(--ink-soft);
+    letter-spacing:0.01em;
+  }
+
+  .according-link{
+    color:#1565a8;
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+
   /* small screens */
   @media (max-width:380px){
     h1{font-size:22px;}
@@ -925,7 +957,7 @@
     </div>
     <div class="science-area-heading">
       <span class="icon-chip">🔬</span>
-      <span class="label">他の科学系部活の案内</span>
+      <span class="label">他の科学系部活の案内 <span class="according">(According to <a href="https://seiryofes.web.app/search" target="_blank" rel="noopener" class="according-link">Seiryo App</a>)</span></span>
     </div>
 
     <div class="detail-block science-club-block" id="detail-science">
@@ -968,7 +1000,7 @@ const schedules = {
     label: "1日目 7/4（土）",
     slots: [
       { start: "13:30", end: "14:30", title: null, detail: "normal" },
-      { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学部による実験ショーを開催します。", detail: "show" },
+      { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学部による実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "15:30", end: "16:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
       { start: "16:00", end: "16:20", title: null, detail: "normal" },
     ]
@@ -980,12 +1012,12 @@ const schedules = {
       { start: "9:30",  end: "10:00", title: null, detail: "normal" },
       { start: "10:00", end: "10:30", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
       { start: "10:30", end: "11:00", title: null, detail: "normal" },
-      { start: "11:00", end: "12:00", title: "第2回 実験ショー", desc: "化学部による実験ショーを開催します。", detail: "show" },
+      { start: "11:00", end: "12:00", title: "第2回 実験ショー", desc: "化学部による実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "12:00", end: "12:30", title: null, detail: "normal" },
       { start: "12:30", end: "13:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
       { start: "13:00", end: "13:30", title: null, detail: "normal" },
       { start: "13:30", end: "14:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
-      { start: "14:00", end: "15:00", title: "第3回 実験ショー", desc: "化学部による実験ショーを開催します。", detail: "show" },
+      { start: "14:00", end: "15:00", title: "第3回 実験ショー", desc: "化学部による実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "15:00", end: "16:00", title: null, detail: "normal" },
     ]
   }
@@ -1093,9 +1125,20 @@ function update(){
 
   if (currentSlot) {
     titleEl.textContent = currentSlot.title || DEFAULT_TITLE;
-    descEl.textContent = currentSlot.desc || DEFAULT_DESC;
     titleEl.dataset.detail = currentSlot.detail || "normal";
     titleEl.classList.add("slot-title-link");
+
+    // 終了30分前の判定
+    const endMin = toMinutes(currentSlot.end);
+    const remainMin = endMin - nowMin;
+    const isEndingSoon = remainMin <= 30 && remainMin > 0;
+
+    let descText = currentSlot.desc || DEFAULT_DESC;
+    if (isEndingSoon) {
+      descEl.innerHTML = `<span class="ending-soon">⚠️ まもなく終了！</span>${descText}`;
+    } else {
+      descEl.textContent = descText;
+    }
   } else {
     // 開催日だが時間外、または開催日ではない
     const isFestivalDay = (todayStr === schedules.day1.date || todayStr === schedules.day2.date);
