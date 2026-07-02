@@ -1032,7 +1032,7 @@
     <div class="detail-block science-club-block">
       <div class="detail-block-title">🔢 数学研究部</div>
       <div class="detail-item">
-        <div class="detail-item-title">「なぜ我々は数学を解くのか」　理系棟2F 数学5番教室</div>
+        <div class="detail-item-title">「我々はなぜ数学を解くのか」　理系棟2F 数学5番教室</div>
         <div class="detail-item-body">数学研究部で精選・作成された問題を解いて景品を手に入れよう！自分の力で勝ち取った景品は忘れられない思い出になる筈！！！</div>
       </div>
     </div>
@@ -1056,7 +1056,7 @@ const schedules = {
       { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学室にて実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "15:30", end: "15:40", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
       { start: "15:40", end: "16:00", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth", sub: { title: "実験ショー<br>＠コモンスペース", desc: "コモンスペースでも実験ショーを開催中！" } },
-      { start: "16:00", end: "16:20", title: null, detail: "normal" },
+      { start: "16:00", end: "16:20", title: null, detail: "normal", endingSoonFrom: "15:50" },
     ]
   },
   day2: {
@@ -1072,7 +1072,7 @@ const schedules = {
       { start: "13:00", end: "13:30", title: null, detail: "normal" },
       { start: "13:30", end: "14:00", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
       { start: "14:00", end: "15:00", title: "第3回 実験ショー", desc: "化学室にて実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
-      { start: "15:00", end: "16:00", title: null, detail: "normal" },
+      { start: "15:00", end: "16:00", title: null, detail: "normal", endingSoonFrom: "15:30" },
     ]
   }
 };
@@ -1200,7 +1200,9 @@ function update(){
   if (currentSlot) {
     const endMin = toMinutes(currentSlot.end);
     const remainMin = endMin - nowMin;
-    const isEndingSoon = remainMin <= 30 && remainMin > 0;
+    const isEndingSoon = currentSlot.endingSoonFrom
+      ? nowMin >= toMinutes(currentSlot.endingSoonFrom) && remainMin > 0
+      : false;
     const endingSoonHTML = isEndingSoon ? `<span class="ending-soon">⚠️ まもなく終了！</span>` : "";
 
     if (currentSlot.sub) {
