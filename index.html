@@ -694,6 +694,21 @@
     transition:box-shadow 0.4s ease, border-color 0.4s ease;
   }
 
+  .science-club-block{
+    cursor:pointer;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transform-origin:top center;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .science-club-block.expanded{
+    transform:scale(1.08);
+    box-shadow:0 8px 24px rgba(15,38,64,0.16);
+    border-color:var(--emerald-deep);
+    position:relative;
+    z-index:10;
+  }
+
   .detail-block.flash{
     animation:glow-pulse 1.8s ease-out 1;
   }
@@ -1143,6 +1158,24 @@ document.addEventListener("click", (e) => {
     section.addEventListener("animationend", () => {
       section.classList.remove("flash");
     }, { once: true });
+  }
+});
+
+// 科学系部活カードのタップ拡大
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".science-club-block");
+  if (card) {
+    // タップしたカードがすでに拡大中なら縮小
+    if (card.classList.contains("expanded")) {
+      card.classList.remove("expanded");
+    } else {
+      // 他の拡大中カードを縮小してから拡大
+      document.querySelectorAll(".science-club-block.expanded").forEach(c => c.classList.remove("expanded"));
+      card.classList.add("expanded");
+    }
+  } else {
+    // カード外タップで全て縮小
+    document.querySelectorAll(".science-club-block.expanded").forEach(c => c.classList.remove("expanded"));
   }
 });
 
