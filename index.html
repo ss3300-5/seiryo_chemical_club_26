@@ -772,6 +772,44 @@
   }
 
 
+  /* ---------- survey block ---------- */
+  .survey-block{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:linear-gradient(135deg, #1565a8, #1e86c8);
+    color:#fff;
+    text-decoration:none;
+    border-radius:14px;
+    padding:16px 18px;
+    margin:0 20px 8px;
+    box-shadow:0 4px 14px rgba(21,101,168,0.30);
+    transition:opacity 0.15s;
+    -webkit-tap-highlight-color:transparent;
+    position:relative;
+    z-index:1;
+  }
+  .survey-block:active{opacity:0.75;}
+  .survey-icon{font-size:26px;flex:0 0 auto;}
+  .survey-body{flex:1;min-width:0;}
+  .survey-label{
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    margin-bottom:3px;
+  }
+  .survey-text{
+    font-size:12px;
+    color:rgba(255,255,255,0.85);
+    line-height:1.5;
+  }
+  .survey-arrow{
+    font-size:18px;
+    font-weight:700;
+    color:rgba(255,255,255,0.7);
+    flex:0 0 auto;
+  }
+
   /* ---------- science area ---------- */
   .science-area{
     padding:24px 20px 24px;
@@ -1009,6 +1047,15 @@
         <div class="detail-item-body">普段はグループごとに研究をしているわけですが、そうでない時間もたくさんあり、その時間は主に雑談の時間となります。これはこれで楽しいです。化学の知識がなくても研究グループに入ってしまえば、その分野に特化した知識が自然と身につきます。化学が、理科が得意でもそうなくても、大丈夫。化学とは慣れです。</div>
       </div>
     </div>
+
+    <a class="survey-block" href="https://docs.google.com/forms/d/e/1FAIpQLScVcE7D82Tt8VAb1apd3CuEid6ZOLPlb9_NiP-FJr970yEiWQ/viewform?usp=dialog" target="_blank" rel="noopener">
+      <div class="survey-icon">📝</div>
+      <div class="survey-body">
+        <div class="survey-label">化学部 アンケート</div>
+        <div class="survey-text">ご来場の感想をぜひお聞かせください！アンケートはこちらから</div>
+      </div>
+      <div class="survey-arrow">→</div>
+    </a>
   </div>
 
   <div class="science-area">
