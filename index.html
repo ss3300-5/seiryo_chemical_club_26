@@ -559,6 +559,51 @@
     min-width:0;
   }
 
+  /* タイムライン2分割 */
+  .slot-body-split{
+    display:flex;
+    gap:0;
+    align-items:stretch;
+  }
+  .slot-split-item{
+    flex:1;
+    min-width:0;
+  }
+  .slot-split-divider{
+    width:1px;
+    background:var(--line);
+    margin:2px 10px;
+    flex:0 0 auto;
+  }
+
+  /* now-card 2分割 */
+  .now-split{
+    display:flex;
+    gap:0;
+    margin-top:10px;
+    align-items:stretch;
+  }
+  .now-split-item{
+    flex:1;
+    min-width:0;
+  }
+  .now-split-label{
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.12em;
+    color:var(--amber);
+    margin-bottom:4px;
+  }
+  .now-split .now-title{
+    font-size:17px;
+  }
+  .now-split-divider{
+    width:1px;
+    background:rgba(255,255,255,0.15);
+    margin:2px 12px;
+    flex:0 0 auto;
+  }
+
   .slot-title{
     font-size:14.5px;
     font-weight:700;
@@ -866,7 +911,7 @@
   <div class="mid-area" id="midArea"></div>
 
   <div class="now-wrap">
-    <div class="now-card">
+    <div class="now-card" id="nowCard">
       <div class="now-label"><span class="pulse-dot"></span>ただいまの様子</div>
       <div class="now-time" id="nowClock">--:--</div>
       <div class="now-title" id="nowTitle">読み込み中…</div>
@@ -983,6 +1028,14 @@
         <div class="detail-item-body">地学系の実験や、スタンプラリー、鉱物販売、屋上見学を実施中！ぜひ来てください！</div>
       </div>
     </div>
+
+    <div class="detail-block science-club-block">
+      <div class="detail-block-title">🔢 数学研究部</div>
+      <div class="detail-item">
+        <div class="detail-item-title">「なぜ我々は数学を解くのか」　理系棟2F 数学5番教室</div>
+        <div class="detail-item-body">数学研究部で精選・作成された問題を解いて景品を手に入れよう！自分の力で勝ち取った景品は忘れられない思い出になる筈！！！</div>
+      </div>
+    </div>
   </div>
 
   <footer>清陵祭 化学部 © 2026</footer>
@@ -992,7 +1045,7 @@
 // ===== タイムテーブルデータ =====
 // title が null のものは「通常」表示にする
 const DEFAULT_TITLE = "通常公開";
-const DEFAULT_DESC = "化学部の展示・実験コーナーを自由にご覧いただけます。";
+const DEFAULT_DESC = "化学室にて化学部の展示・実験コーナーを自由にご覧いただけます。";
 
 const schedules = {
   day1: {
@@ -1000,8 +1053,9 @@ const schedules = {
     label: "1日目 7/4（土）",
     slots: [
       { start: "13:30", end: "14:30", title: null, detail: "normal" },
-      { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学部による実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
-      { start: "15:30", end: "16:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学室にて実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
+      { start: "15:30", end: "15:40", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
+      { start: "15:40", end: "16:00", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth", sub: { title: "実験ショー<br>＠コモンスペース", desc: "コモンスペースでも実験ショーを開催中！" } },
       { start: "16:00", end: "16:20", title: null, detail: "normal" },
     ]
   },
@@ -1010,14 +1064,14 @@ const schedules = {
     label: "2日目 7/5（日）",
     slots: [
       { start: "9:30",  end: "10:00", title: null, detail: "normal" },
-      { start: "10:00", end: "10:30", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "10:00", end: "10:30", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
       { start: "10:30", end: "11:00", title: null, detail: "normal" },
-      { start: "11:00", end: "12:00", title: "第2回 実験ショー", desc: "化学部による実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
+      { start: "11:00", end: "12:00", title: "第2回 実験ショー", desc: "化学室にて実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "12:00", end: "12:30", title: null, detail: "normal" },
-      { start: "12:30", end: "13:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
+      { start: "12:30", end: "13:00", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
       { start: "13:00", end: "13:30", title: null, detail: "normal" },
-      { start: "13:30", end: "14:00", title: "通常公開+実験ブース", desc: "通常公開に加えて実験ブースも開催しています。", detail: "booth" },
-      { start: "14:00", end: "15:00", title: "第3回 実験ショー", desc: "化学部による実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
+      { start: "13:30", end: "14:00", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
+      { start: "14:00", end: "15:00", title: "第3回 実験ショー", desc: "化学室にて実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "15:00", end: "16:00", title: null, detail: "normal" },
     ]
   }
@@ -1044,13 +1098,31 @@ function renderSchedule(containerId, dayData){
     const title = slot.title || DEFAULT_TITLE;
     const detailKey = slot.detail || "normal";
 
-    div.innerHTML = `
-      <div class="slot-time">${slot.start}<br>〜${slot.end}</div>
-      <div class="slot-body">
-        <div class="slot-title slot-title-link" data-detail="${detailKey}">${title}${isSpecial ? '<span class="badge">注目</span>' : ''}</div>
-        ${slot.desc ? `<div class="slot-note">${slot.desc}</div>` : ''}
-      </div>
-    `;
+    if (slot.sub) {
+      // 2分割表示
+      div.innerHTML = `
+        <div class="slot-time">${slot.start}<br>〜${slot.end}</div>
+        <div class="slot-body slot-body-split">
+          <div class="slot-split-item">
+            <div class="slot-title slot-title-link" data-detail="${detailKey}">${title}${isSpecial ? '<span class="badge">注目</span>' : ''}</div>
+            ${slot.desc ? `<div class="slot-note">${slot.desc}</div>` : ''}
+          </div>
+          <div class="slot-split-divider"></div>
+          <div class="slot-split-item">
+            <div class="slot-title slot-title-link" data-detail="show">${slot.sub.title}<span class="badge">注目</span></div>
+            ${slot.sub.desc ? `<div class="slot-note">${slot.sub.desc}</div>` : ''}
+          </div>
+        </div>
+      `;
+    } else {
+      div.innerHTML = `
+        <div class="slot-time">${slot.start}<br>〜${slot.end}</div>
+        <div class="slot-body">
+          <div class="slot-title slot-title-link" data-detail="${detailKey}">${title}${isSpecial ? '<span class="badge">注目</span>' : ''}</div>
+          ${slot.desc ? `<div class="slot-note">${slot.desc}</div>` : ''}
+        </div>
+      `;
+    }
     container.appendChild(div);
   });
 }
@@ -1079,7 +1151,8 @@ function update(){
   const todayStr = now.getFullYear() + "-" + pad(now.getMonth()+1) + "-" + pad(now.getDate());
   const nowMin = now.getHours() * 60 + now.getMinutes();
 
-  document.getElementById("nowClock").textContent =
+  const clockEl = document.getElementById("nowClock");
+  if (clockEl) clockEl.textContent =
     pad(now.getMonth()+1) + "/" + pad(now.getDate()) + "（" + ["日","月","火","水","木","金","土"][now.getDay()] + "） " +
     pad(now.getHours()) + ":" + pad(now.getMinutes());
 
@@ -1122,35 +1195,81 @@ function update(){
 
   const titleEl = document.getElementById("nowTitle");
   const descEl = document.getElementById("nowDesc");
+  const nowCard = document.getElementById("nowCard");
 
   if (currentSlot) {
-    titleEl.textContent = currentSlot.title || DEFAULT_TITLE;
-    titleEl.dataset.detail = currentSlot.detail || "normal";
-    titleEl.classList.add("slot-title-link");
-
-    // 終了30分前の判定
     const endMin = toMinutes(currentSlot.end);
     const remainMin = endMin - nowMin;
     const isEndingSoon = remainMin <= 30 && remainMin > 0;
+    const endingSoonHTML = isEndingSoon ? `<span class="ending-soon">⚠️ まもなく終了！</span>` : "";
 
-    let descText = currentSlot.desc || DEFAULT_DESC;
-    if (isEndingSoon) {
-      descEl.innerHTML = `<span class="ending-soon">⚠️ まもなく終了！</span>${descText}`;
+    if (currentSlot.sub) {
+      // 2分割表示
+      nowCard.innerHTML = `
+        <div class="now-label"><span class="pulse-dot"></span>ただいまの様子</div>
+        <div class="now-time" id="nowClock">${document.getElementById("nowClock") ? document.getElementById("nowClock").textContent : "--:--"}</div>
+        <div class="now-split">
+          <div class="now-split-item">
+            <div class="now-split-label">メイン</div>
+            <div class="now-title slot-title-link" data-detail="${currentSlot.detail || 'normal'}">${currentSlot.title || DEFAULT_TITLE}</div>
+            <div class="now-desc">${endingSoonHTML}${currentSlot.desc || DEFAULT_DESC}</div>
+          </div>
+          <div class="now-split-divider"></div>
+          <div class="now-split-item">
+            <div class="now-split-label">同時開催</div>
+            <div class="now-title slot-title-link" data-detail="show">${currentSlot.sub.title}</div>
+            <div class="now-desc">${currentSlot.sub.desc || ""}</div>
+          </div>
+        </div>
+      `;
+      // 時計を再更新
+      const clockEl = nowCard.querySelector("#nowClock");
+      if (clockEl) clockEl.id = "nowClock";
     } else {
-      descEl.textContent = descText;
+      // 通常表示（初回以降はinnerHTMLが変わっている可能性があるので必要な要素を確認して更新）
+      if (!nowCard.querySelector("#nowTitle")) {
+        nowCard.innerHTML = `
+          <div class="now-label"><span class="pulse-dot"></span>ただいまの様子</div>
+          <div class="now-time" id="nowClock">--:--</div>
+          <div class="now-title" id="nowTitle"></div>
+          <div class="now-desc" id="nowDesc"></div>
+        `;
+      }
+      document.getElementById("nowTitle").textContent = currentSlot.title || DEFAULT_TITLE;
+      document.getElementById("nowTitle").dataset.detail = currentSlot.detail || "normal";
+      document.getElementById("nowTitle").classList.add("slot-title-link");
+      const desc = document.getElementById("nowDesc");
+      if (isEndingSoon) {
+        desc.innerHTML = `<span class="ending-soon">⚠️ まもなく終了！</span>${currentSlot.desc || DEFAULT_DESC}`;
+      } else {
+        desc.textContent = currentSlot.desc || DEFAULT_DESC;
+      }
+    }
+    if (document.getElementById("nowTitle")) {
+      titleEl && (titleEl.dataset.detail = currentSlot.detail || "normal");
     }
   } else {
-    // 開催日だが時間外、または開催日ではない
+    // 開催日だが時間外、または開催日ではない — 通常構造に戻す
+    if (!nowCard.querySelector("#nowTitle")) {
+      nowCard.innerHTML = `
+        <div class="now-label"><span class="pulse-dot"></span>ただいまの様子</div>
+        <div class="now-time" id="nowClock">--:--</div>
+        <div class="now-title" id="nowTitle"></div>
+        <div class="now-desc" id="nowDesc"></div>
+      `;
+    }
+    const t = document.getElementById("nowTitle");
+    const d = document.getElementById("nowDesc");
     const isFestivalDay = (todayStr === schedules.day1.date || todayStr === schedules.day2.date);
     if (isFestivalDay) {
-      titleEl.textContent = "本日の開催時間外です";
-      descEl.textContent = "開催時間内に再度ご確認ください。";
+      t.textContent = "本日の開催時間外です";
+      d.textContent = "開催時間内に再度ご確認ください。";
     } else {
-      titleEl.textContent = "清陵祭は7/4(土)・7/5(日)に開催";
-      descEl.textContent = "開催期間中はこのページで現在の催し物が確認できます。";
+      t.textContent = "清陵祭は7/4(土)・7/5(日)に開催";
+      d.textContent = "開催期間中はこのページで現在の催し物が確認できます。";
     }
-    delete titleEl.dataset.detail;
-    titleEl.classList.remove("slot-title-link");
+    delete t.dataset.detail;
+    t.classList.remove("slot-title-link");
   }
 
   // ===== mid-area: カウントダウン or 科学系部活ボタン =====
