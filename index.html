@@ -1349,10 +1349,33 @@ function update(){
     }
     const t = document.getElementById("nowTitle");
     const d = document.getElementById("nowDesc");
-    const isFestivalDay = (todayStr === schedules.day1.date || todayStr === schedules.day2.date);
-    if (isFestivalDay) {
-      t.textContent = "本日の開催時間外です";
-      d.textContent = "開催時間内に再度ご確認ください。";
+    const isDay1 = todayStr === schedules.day1.date;
+    const isDay2 = todayStr === schedules.day2.date;
+    const isAfterFestival = todayStr > schedules.day2.date;
+
+    if (isDay1) {
+      // 4日の開催時間外（開始前 or 終了後）
+      const day1LastEnd = toMinutes(schedules.day1.slots[schedules.day1.slots.length - 1].end);
+      if (nowMin >= day1LastEnd) {
+        t.textContent = "本日は終了しました。";
+        d.textContent = "明日のお越しをお待ちしております！";
+      } else {
+        t.textContent = "本日の開催時間外です";
+        d.textContent = "開催時間内に再度ご確認ください。";
+      }
+    } else if (isDay2) {
+      // 5日の開催時間外（開始前 or 終了後）
+      const day2LastEnd = toMinutes(schedules.day2.slots[schedules.day2.slots.length - 1].end);
+      if (nowMin >= day2LastEnd) {
+        t.textContent = "清陵祭は終了しました！";
+        d.textContent = "また来年のお越しをお待ちしております。ご来場いただきありがとうございました！";
+      } else {
+        t.textContent = "本日の開催時間外です";
+        d.textContent = "開催時間内に再度ご確認ください。";
+      }
+    } else if (isAfterFestival) {
+      t.textContent = "清陵祭は終了しました！";
+      d.textContent = "また来年のお越しをお待ちしております。ご来場いただきありがとうございました！";
     } else {
       t.textContent = "清陵祭は7/4(土)・7/5(日)に開催";
       d.textContent = "開催期間中はこのページで現在の催し物が確認できます。";
