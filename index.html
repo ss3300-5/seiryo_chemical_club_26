@@ -1026,9 +1026,16 @@
     </div>
 
     <div class="detail-block" id="detail-show">
-      <div class="detail-block-title"><span class="num">03</span>実験ショー</div>
+      <div class="detail-block-title"><span class="num">03</span>実験ショー＠化学室</div>
       <div class="detail-item">
         <div class="detail-item-body">毎年大好評の実験ショーです！　一般公開中に3回行います。すべて違う人が、違う実験を行うので、全部来ても、一つだけ来ても楽しめる内容になっています！　ぜひ見に来てくださいね！</div>
+      </div>
+    </div>
+
+    <div class="detail-block" id="detail-common-show">
+      <div class="detail-block-title"><span class="num">04</span>実験ショー＠コモンスペース</div>
+      <div class="detail-item">
+        <div class="detail-item-body">化学部がコモンスペースで液体窒素を使った実験を行います！何が見れるかはお楽しみです。大きな音が出るかもしれないので注意してください！そして、この時間は化学室で液体窒素を使った実験ができなくなるのでご了承ください。ぜひ来てくださいね！！</div>
       </div>
     </div>
   </div>
@@ -1114,7 +1121,7 @@ const schedules = {
     date: "2026-07-04",
     label: "1日目 7/4（土）",
     slots: [
-      { start: "13:30", end: "14:30", title: null, detail: "normal" },
+      { start: "13:00", end: "14:30", title: null, detail: "normal" },
       { start: "14:30", end: "15:30", title: "第1回 実験ショー", desc: "化学室にて実験ショーを開催します。早く終わる可能性があります。ご来場はお早めに。", detail: "show" },
       { start: "15:30", end: "15:40", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth" },
       { start: "15:40", end: "16:00", title: "通常公開+実験ブース", desc: "化学室にて通常公開と実験ブースを開催しています。", detail: "booth", sub: { title: "実験ショー<br>＠コモンスペース", desc: "コモンスペースでも実験ショーを開催中！" } },
@@ -1171,7 +1178,7 @@ function renderSchedule(containerId, dayData){
           </div>
           <div class="slot-split-divider"></div>
           <div class="slot-split-item">
-            <div class="slot-title slot-title-link" data-detail="show">${slot.sub.title}<span class="badge">注目</span></div>
+            <div class="slot-title slot-title-link" data-detail="common-show">${slot.sub.title}<span class="badge">注目</span></div>
             ${slot.sub.desc ? `<div class="slot-note">${slot.sub.desc}</div>` : ''}
           </div>
         </div>
@@ -1299,7 +1306,7 @@ function update(){
           <div class="now-split-divider"></div>
           <div class="now-split-item">
             <div class="now-split-label">同時開催</div>
-            <div class="now-title slot-title-link" data-detail="show">${currentSlot.sub.title}</div>
+            <div class="now-title slot-title-link" data-detail="common-show">${currentSlot.sub.title}</div>
             <div class="now-desc">${currentSlot.sub.desc || ""}</div>
           </div>
         </div>
